@@ -9,7 +9,12 @@ class MainViewModel : ViewModel() {
     val scoreLiveData = MutableLiveData(0)
     val colorTrueLiveData = MutableLiveData(R.color.purple_500)
     val colorFalseLiveData = MutableLiveData(R.color.purple_500)
-    val statusButtonLLiveData = MutableLiveData<Boolean>(true)
+    val isEnableButtonLLiveData = MutableLiveData<Boolean>(true)
+    var nextEnabledLiveData = MutableLiveData<Boolean>(true)
+    var backEnabledLiveData = MutableLiveData<Boolean>(false)
+    val questionLiveData = MutableLiveData<String>(QuestionRepository.questionList[0].question)
+    val questionCount = QuestionRepository.questionList.size
+
     val messageLiveData = Transformations.map(numberLiveData) {
         when {
             it < questionCount / 2 -> "خیلی مونده"
@@ -19,12 +24,7 @@ class MainViewModel : ViewModel() {
 
     }
 
-    val questionLiveData = MutableLiveData<String>(QuestionRepository.questionList[0].question)
 
-    val questionCount = QuestionRepository.questionList.size
-
-    var nextEnabledLiveData = MutableLiveData<Boolean>(true)
-    var backEnabledLiveData = MutableLiveData<Boolean>(false)
 
 
     private fun setQuestion(i: Int) {
@@ -36,7 +36,7 @@ class MainViewModel : ViewModel() {
                 backEnabledLiveData.value = true
             }
         }
-        statusButtonLLiveData.value=true
+        isEnableButtonLLiveData.value=true
         questionLiveData.value = QuestionRepository.questionList[i].question
     }
 
@@ -68,7 +68,7 @@ class MainViewModel : ViewModel() {
                 colorTrueLiveData.value = R.color.red
             }
         }
-        statusButtonLLiveData.value=false
+        isEnableButtonLLiveData.value=false
     }
 
     fun falseButtonClicked() {
@@ -81,6 +81,6 @@ class MainViewModel : ViewModel() {
                 colorFalseLiveData.value = R.color.red
             }
         }
-        statusButtonLLiveData.value=false
+        isEnableButtonLLiveData.value=false
     }
 }

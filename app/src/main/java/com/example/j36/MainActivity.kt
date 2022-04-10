@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             buttonTrue.setBackgroundColor(ContextCompat.getColor(this, it))
         }
 
-        vmodel.statusButtonLLiveData.observe(this) {
+        vmodel.isEnableButtonLLiveData.observe(this) {
             buttonTrue.isEnabled = it
             buttonFalse.isEnabled = it
         }
