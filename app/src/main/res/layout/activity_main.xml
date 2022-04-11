@@ -38,6 +38,8 @@
         android:layout_marginTop="92dp"
         android:gravity="center"
         android:text="0"
+        android:textStyle="bold"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="@+id/progressBar"
         app:layout_constraintStart_toStartOf="@+id/progressBar"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />

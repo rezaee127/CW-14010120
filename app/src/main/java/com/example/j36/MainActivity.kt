@@ -1,6 +1,7 @@
 package com.example.j36
 
 import MainViewModel
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -64,6 +65,10 @@ class MainActivity : AppCompatActivity() {
 
         vmodel.colorTrueLiveData.observe(this) {
             buttonTrue.setBackgroundColor(ContextCompat.getColor(this, it))
+        }
+
+        vmodel.colorScoreTextLiveData.observe(this){
+            textViewScore.setTextColor(ContextCompat.getColor(this, it))
         }
 
         vmodel.isEnableButtonLLiveData.observe(this) {

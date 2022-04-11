@@ -24,6 +24,14 @@ class MainViewModel : ViewModel() {
 
     }
 
+    val colorScoreTextLiveData = Transformations.map(scoreLiveData) {
+        when {
+            it==0 -> R.color.yellow
+            it<0 -> R.color.red
+            else -> R.color.green
+        }
+
+    }
 
 
 
