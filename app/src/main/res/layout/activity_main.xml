@@ -127,5 +127,16 @@
         app:layout_constraintStart_toStartOf="@+id/tvQuestion"
         app:layout_constraintTop_toTopOf="@+id/btn_false" />
 
+    <Button
+        android:id="@+id/buttonAddQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Add Question"
+        app:layout_constraintEnd_toEndOf="@+id/nextButton"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="@+id/backButton"
+        app:layout_constraintTop_toBottomOf="@+id/nextButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
