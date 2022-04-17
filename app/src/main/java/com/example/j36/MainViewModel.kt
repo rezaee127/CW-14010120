@@ -1,51 +1,71 @@
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import com.example.j36.R
+package com.example.j36
 
-class MainViewModel : ViewModel() {
+import android.app.Application
+import androidx.lifecycle.*
 
-    val numberLiveData = MutableLiveData<Int>(0)
+
+
+class MainViewModel (app: Application): AndroidViewModel(app) {
+
+    val numberLiveData = MutableLiveData<Int>(1)
     val scoreLiveData = MutableLiveData(0)
     val colorTrueLiveData = MutableLiveData(R.color.purple_500)
     val colorFalseLiveData = MutableLiveData(R.color.purple_500)
     val isEnableButtonLLiveData = MutableLiveData<Boolean>(true)
     var nextEnabledLiveData = MutableLiveData<Boolean>(true)
     var backEnabledLiveData = MutableLiveData<Boolean>(false)
-    val questionLiveData = MutableLiveData<String>(QuestionRepository.questionList[0].question)
-    val questionCount = QuestionRepository.questionList.size
+    var questionLiveData:MutableLiveData<String>
+    var questionCount: LiveData<Int>?
+    var colorScoreTextLiveData:LiveData<Int>
+    var messageLiveData:LiveData<String>
 
-    val messageLiveData = Transformations.map(numberLiveData) {
-        when {
-            it < questionCount / 2 -> "خیلی مونده"
-            it > questionCount / 2 -> "داری میرسی"
-            else -> "ادامه بده"
+    init{
+        Repository.initDB(app.applicationContext)
+        addQuestion()
+        addQuestion()
+        addQuestion()
+        questionLiveData = MutableLiveData<String>(Repository.getQuestion(1)?.question)
+        questionCount = Repository.getCountQuestionLiveData()
+
+        messageLiveData = Transformations.map(numberLiveData) {
+            var x="خیلی مونده"
+            if(questionCount?.value!=null){
+            x = when {
+                it < questionCount?.value!!/2 -> "خیلی مونده"
+                it > questionCount?.value!!/2 -> "داری میرسی"
+                else -> "ادامه بده"
+            }}
+             x
+        }
+
+        colorScoreTextLiveData = Transformations.map(scoreLiveData) {
+            when {
+                it in 10..20 -> R.color.yellow
+                it<10 -> R.color.red
+                else -> R.color.green
+            }
         }
 
     }
 
-    val colorScoreTextLiveData = Transformations.map(scoreLiveData) {
-        when {
-            it==0 -> R.color.yellow
-            it<0 -> R.color.red
-            else -> R.color.green
-        }
+
+    fun addQuestion(){
+        Repository.setQuestion()
 
     }
-
 
 
     private fun setQuestion(i: Int) {
         when (i) {
-            0 -> backEnabledLiveData.value = false
-            questionCount - 1 -> nextEnabledLiveData.value = false
+            1 -> backEnabledLiveData.value = false
+            questionCount?.value -> nextEnabledLiveData.value = false
             else -> {
                 nextEnabledLiveData.value = true
                 backEnabledLiveData.value = true
             }
         }
         isEnableButtonLLiveData.value=true
-        questionLiveData.value = QuestionRepository.questionList[i].question
+        questionLiveData.value =  Repository.getQuestion(i)?.question
     }
 
     fun click() {
@@ -68,7 +88,7 @@ class MainViewModel : ViewModel() {
 
     fun trueButtonClicked() {
         numberLiveData.value?.let {
-            if (QuestionRepository.questionList[it].answer) {
+            if (Repository.getQuestion(it)?.answer == true) {
                 scoreLiveData.value = scoreLiveData.value?.plus(5)
                 colorTrueLiveData.value = R.color.green
             } else {
@@ -81,7 +101,7 @@ class MainViewModel : ViewModel() {
 
     fun falseButtonClicked() {
         numberLiveData.value?.let {
-            if (!QuestionRepository.questionList[it].answer) {
+            if (Repository.getQuestion(it)?.answer==false) {
                 scoreLiveData.value = scoreLiveData.value?.plus(5)
                 colorFalseLiveData.value = R.color.green
             } else {
@@ -90,5 +110,10 @@ class MainViewModel : ViewModel() {
             }
         }
         isEnableButtonLLiveData.value=false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Repository.delete()
     }
 }

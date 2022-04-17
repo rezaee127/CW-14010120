@@ -1,7 +1,5 @@
 package com.example.j36
 
-import MainViewModel
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -12,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 
 class MainActivity : AppCompatActivity() {
-    val vmodel: MainViewModel by viewModels()
+    private val vModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,17 +27,17 @@ class MainActivity : AppCompatActivity() {
         val buttonTrue = findViewById<Button>(R.id.btn_true)
         val buttonFalse = findViewById<Button>(R.id.btn_false)
         val textViewScore = findViewById<TextView>(R.id.tv_score)
+        val buttonAddQuestion=findViewById<Button>(R.id.buttonAddQuestion)
 
 
-        progressBar.max = vmodel.questionCount
 
         val messageObserver = Observer<String> {
             textViewMessage.text = it
         }
 
         val numberObserver = Observer<Int> { number ->
-            textView.text = (number + 1).toString()
-            progressBar.progress = number + 1
+            textView.text = (number).toString()
+            progressBar.progress = number
         }
 
         val buttonEnabledObserver = Observer<Boolean> { enabled ->
@@ -50,52 +48,61 @@ class MainActivity : AppCompatActivity() {
             questionText.text = question
         }
 
-        vmodel.messageLiveData.observe(this, messageObserver)
-        vmodel.questionLiveData.observe(this, questionObserver)
-        vmodel.nextEnabledLiveData.observe(this, buttonEnabledObserver)
-        vmodel.numberLiveData.observe(this, numberObserver)
+        vModel.messageLiveData.observe(this, messageObserver)
+        vModel.questionLiveData.observe(this, questionObserver)
+        vModel.nextEnabledLiveData.observe(this, buttonEnabledObserver)
+        vModel.numberLiveData.observe(this, numberObserver)
 
-        vmodel.backEnabledLiveData.observe(this) {
+        vModel.backEnabledLiveData.observe(this) {
             buttonBack.isEnabled = it
         }
 
-        vmodel.colorFalseLiveData.observe(this) {
+        vModel.colorFalseLiveData.observe(this) {
             buttonFalse.setBackgroundColor(ContextCompat.getColor(this, it))
         }
 
-        vmodel.colorTrueLiveData.observe(this) {
+        vModel.colorTrueLiveData.observe(this) {
             buttonTrue.setBackgroundColor(ContextCompat.getColor(this, it))
         }
 
-        vmodel.colorScoreTextLiveData.observe(this){
+        vModel.colorScoreTextLiveData.observe(this){
             textViewScore.setTextColor(ContextCompat.getColor(this, it))
         }
 
-        vmodel.isEnableButtonLLiveData.observe(this) {
+        vModel.isEnableButtonLLiveData.observe(this) {
             buttonTrue.isEnabled = it
             buttonFalse.isEnabled = it
         }
 
-        vmodel.scoreLiveData.observe(this) {
+        vModel.scoreLiveData.observe(this) {
             textViewScore.text = it.toString()
         }
 
 
 
         buttonNext.setOnClickListener {
-            vmodel.nextClicked()
+            vModel.nextClicked()
         }
 
         buttonBack.setOnClickListener {
-            vmodel.backClicked()
+            vModel.backClicked()
         }
 
         buttonTrue.setOnClickListener {
-            vmodel.trueButtonClicked()
+            vModel.trueButtonClicked()
         }
 
         buttonFalse.setOnClickListener {
-            vmodel.falseButtonClicked()
+            vModel.falseButtonClicked()
         }
+
+        buttonAddQuestion.setOnClickListener {
+            vModel.addQuestion()
+        }
+
+        vModel.questionCount?.observe(this){
+            progressBar.max=it
+        }
+
     }
 }
