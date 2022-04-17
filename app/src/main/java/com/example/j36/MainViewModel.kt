@@ -112,8 +112,4 @@ class MainViewModel (app: Application): AndroidViewModel(app) {
         isEnableButtonLLiveData.value=false
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Repository.delete()
-    }
 }

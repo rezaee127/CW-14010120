@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         val buttonFalse = findViewById<Button>(R.id.btn_false)
         val textViewScore = findViewById<TextView>(R.id.tv_score)
         val buttonAddQuestion=findViewById<Button>(R.id.buttonAddQuestion)
-
+        val textViewCount=findViewById<TextView>(R.id.textViewCount)
 
 
         val messageObserver = Observer<String> {
@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity() {
 
         vModel.questionCount?.observe(this){
             progressBar.max=it
+            textViewCount.text=it.toString()
         }
 
     }

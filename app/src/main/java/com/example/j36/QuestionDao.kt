@@ -20,6 +20,5 @@ interface QuestionDao {
     @Query("SELECT * FROM Question WHERE id IN(:id)")
     fun getQuestion(id:Int): Question
 
-    @Query("DELETE FROM Question")
-    fun deleteAll()
+
 }

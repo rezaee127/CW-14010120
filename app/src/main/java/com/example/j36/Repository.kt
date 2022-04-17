@@ -58,7 +58,5 @@ object Repository {
         return questionDao?.getCountQuestionLiveData()
     }
 
-    fun delete(){
-        questionDao?.deleteAll()
-    }
+
 }
