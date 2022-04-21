@@ -8,13 +8,13 @@ import androidx.lifecycle.LiveData
 
 object Repository {
 
-    var db: Database3? = null
-    var questionDao: QuestionDao? = null
+    lateinit var db: Database3
+    lateinit var questionDao: QuestionDao
 
 
     fun initDB(context: Context) {
         db = Database3.getMyDataBase(context)
-        questionDao = db?.questionDao()
+        questionDao = db.questionDao()
     }
 
 
@@ -24,6 +24,7 @@ object Repository {
         val answer = num1 - num2
         val rand = (1..2).random()
         val question: Question
+
 
         if (rand == 1) {
             question = Question(0, "$num1 - $num2 = $answer", true)
@@ -43,20 +44,23 @@ object Repository {
     }
 
     fun setQuestion() {
-        questionDao?.insert(newRandomQuestion())
+        questionDao.insert(newRandomQuestion())
     }
 
-    fun getQuestion(id:Int): Question?{
-        return questionDao?.getQuestion(id)
+    fun getQuestion(id:Int): Question{
+        return questionDao.getQuestion(id)
     }
 
-    fun getCountQuestion():Int?{
-        return questionDao?.getCountQuestion()
+    fun getCountQuestion():Int{
+        return questionDao.getCountQuestion()
     }
 
-    fun getCountQuestionLiveData():LiveData<Int>?{
-        return questionDao?.getCountQuestionLiveData()
+    fun getCountQuestionLiveData():LiveData<Int>{
+        return questionDao.getCountQuestionLiveData()
     }
 
+    fun deleteAll(){
+        questionDao.deleteAll()
+    }
 
 }

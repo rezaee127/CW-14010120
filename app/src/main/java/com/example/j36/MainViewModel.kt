@@ -7,6 +7,7 @@ import androidx.lifecycle.*
 
 class MainViewModel (app: Application): AndroidViewModel(app) {
 
+    val db=Repository.initDB(app.applicationContext)
     val numberLiveData = MutableLiveData<Int>(1)
     val scoreLiveData = MutableLiveData(0)
     val colorTrueLiveData = MutableLiveData(R.color.purple_500)
@@ -20,11 +21,11 @@ class MainViewModel (app: Application): AndroidViewModel(app) {
     var messageLiveData:LiveData<String>
 
     init{
-        Repository.initDB(app.applicationContext)
+        //Repository.initDB(app.applicationContext)
         addQuestion()
         addQuestion()
         addQuestion()
-        questionLiveData = MutableLiveData<String>(Repository.getQuestion(1)?.question)
+        questionLiveData = MutableLiveData<String>(Repository.getQuestion(1).question)
         questionCount = Repository.getCountQuestionLiveData()
 
         messageLiveData = Transformations.map(numberLiveData) {
@@ -48,6 +49,9 @@ class MainViewModel (app: Application): AndroidViewModel(app) {
 
     }
 
+    fun delete(){
+        Repository.deleteAll()
+    }
 
     fun addQuestion(){
         Repository.setQuestion()
@@ -65,7 +69,7 @@ class MainViewModel (app: Application): AndroidViewModel(app) {
             }
         }
         isEnableButtonLLiveData.value=true
-        questionLiveData.value =  Repository.getQuestion(i)?.question
+        questionLiveData.value =  Repository.getQuestion(i).question
     }
 
     fun click() {
@@ -88,7 +92,7 @@ class MainViewModel (app: Application): AndroidViewModel(app) {
 
     fun trueButtonClicked() {
         numberLiveData.value?.let {
-            if (Repository.getQuestion(it)?.answer == true) {
+            if (Repository.getQuestion(it).answer == true) {
                 scoreLiveData.value = scoreLiveData.value?.plus(5)
                 colorTrueLiveData.value = R.color.green
             } else {
@@ -101,7 +105,7 @@ class MainViewModel (app: Application): AndroidViewModel(app) {
 
     fun falseButtonClicked() {
         numberLiveData.value?.let {
-            if (Repository.getQuestion(it)?.answer==false) {
+            if (Repository.getQuestion(it).answer==false) {
                 scoreLiveData.value = scoreLiveData.value?.plus(5)
                 colorFalseLiveData.value = R.color.green
             } else {
