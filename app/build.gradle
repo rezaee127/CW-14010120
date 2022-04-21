@@ -31,12 +31,13 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        viewBinding = true
+        dataBinding true
     }
 
 }
 
 dependencies {
+
 
 
     def room_version = "2.4.2"
