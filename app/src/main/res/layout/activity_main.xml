@@ -4,9 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+       <variable
+           name="score"
+           type="int" />
+
         <variable
-            name="score"
-            type="int" />
+            name="vModel"
+            type="com.example.j36.MainViewModel" />
 
     </data>
 
@@ -164,7 +168,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@{score>10 ? `very good` : `oh no`}"
+        android:text="@{vModel.scoreLiveData>10 ? `very good` : `oh no`}"
         app:layout_constraintBottom_toBottomOf="@+id/tvMessage"
         app:layout_constraintEnd_toStartOf="@+id/tvMessage"
         app:layout_constraintHorizontal_bias="0.504"
